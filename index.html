@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080808">
+  <title>Digit Analysis Pro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <div>
+    <h1>Digit Analysis Pro</h1>
+    <p>Live Deriv Market Analyzer</p>
+  </div>
+
+  <div id="status" class="status disconnected">
+    DISCONNECTED
+  </div>
+</header>
+
+<main>
+
+  <!-- MARKET CONNECTION -->
+  <section class="card">
+    <h2>Market Connection</h2>
+
+    <div class="controls">
+
+      <label>
+        Market
+        <select id="symbol">
+          <option value="1HZ10V">Volatility 10 (1s)</option>
+          <option value="1HZ25V">Volatility 25 (1s)</option>
+          <option value="1HZ50V">Volatility 50 (1s)</option>
+          <option value="1HZ75V">Volatility 75 (1s)</option>
+          <option value="1HZ100V">Volatility 100 (1s)</option>
+          <option value="R_10">Volatility 10</option>
+          <option value="R_25">Volatility 25</option>
+          <option value="R_50">Volatility 50</option>
+          <option value="R_75">Volatility 75</option>
+          <option value="R_100">Volatility 100</option>
+        </select>
+      </label>
+
+      <label>
+        Analysis
+        <select id="analysisMode">
+          <option value="all" selected>All Digits 0–9</option>
+        </select>
+      </label>
+
+    </div>
+
+    <div class="buttons">
+      <button id="connectBtn" onclick="connect()">
+        CONNECT LIVE
+      </button>
+
+      <button id="disconnectBtn" onclick="disconnect()" disabled>
+        DISCONNECT
+      </button>
+
+      <button onclick="clearData()" class="secondary">
+        CLEAR DATA
+      </button>
+    </div>
+
+    <div id="connectionMessage" class="connection-message">
+      Ready to connect to Deriv.
+    </div>
+
+  </section>
+
+
+  <!-- CURRENT TICK -->
+  <section class="card current-card">
+
+    <div class="small-title">
+      CURRENT LAST DIGIT
+    </div>
+
+    <div id="currentDigit" class="current-digit">
+      -
+    </div>
+
+    <div id="currentPrice" class="price">
+      Waiting for tick...
+    </div>
+
+    <div id="tickTime" class="time">
+      --
+    </div>
+
+  </section>
+
+
+  <!-- ANALYSIS SUMMARY -->
+  <section class="card">
+
+    <h2>Digit Analysis</h2>
+
+    <div id="analysisSummary" class="summary">
+      Waiting for live data...
+    </div>
+
+    <div class="table-container">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Digit</th>
+            <th>Count</th>
+            <th>Frequency</th>
+            <th>Recent</th>
+            <th>Bar</th>
+          </tr>
+        </thead>
+
+        <tbody id="digitTable">
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+
+  <!-- DISTRIBUTION -->
+  <section class="card">
+
+    <h2>Digit Distribution 0–9</h2>
+
+    <div class="distribution">
+
+      <div class="bar-container">
+        <div class="digit-label">0</div>
+        <div class="bar">
+          <div id="bar0" class="fill"></div>
+        </div>
+        <div id="percent0">0%</div>
+      </div>
+
+      <div class="bar-container">
+        <div class="digit-label">1</div>
+        <div class="bar">
+          <div id="bar1" class="fill"></div>
+        </div>
+        <div id="percent1">0%</div>
+      </div>
+
+      <div class="bar-container">
+        <div class="digit-label">2</div>
+        <div class="bar">
+          <div id="bar2" class="fill"></div>
+        </div>
+        <div id="percent2">0%</div>
+      </div>
+
+      <div class="bar-container">
+        <div class="digit-label">3</div>
+        <div class="bar">
+          <div id="bar3" class="fill"></div>
+        </div>
+        <div id="percent3">0%</div>
+      </div>
+
+      <div class="bar-container">
+        <div class="digit-label">4</div>
+        <div class="bar">
+          <div id="bar4" class="fill"></div>
+        </div>
+        <div id="percent4">0%</div>
+      </div>
+
+      <div class="bar-container">
+        <div class="digit-label">5</div>
+        <div class="bar">
+          <div id="bar5" class="fill"></div>
+        </div>
+        <div id="percent5">0%</div>
+      </div>
+
+      <div class="bar-container">
+        <div class="digit-label">6</div>
+        <div class="bar">
+          <div id="bar6" class="fill"></div>
+        </div>
+        <div id="percent6">0%</div>
+      </div>
+
+      <div class="bar-container">
+        <div class="digit-label">7</div>
+        <div class="bar">
+          <div id="bar7" class="fill"></div>
+        </div>
+        <div id="percent7">0%</div>
+      </div>
+
+      <div class="bar-container">
+        <div class="digit-label">8</div>
+        <div class="bar">
+          <div id="bar8" class="fill"></div>
+        </div>
+        <div id="percent8">0%</div>
+      </div>
+
+      <div class="bar-container">
+        <div class="digit-label">9</div>
+        <div class="bar">
+          <div id="bar9" class="fill"></div>
+        </div>
+        <div id="percent9">0%</div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- RECENT DIGITS -->
+  <section class="card">
+
+    <h2>Recent Digits</h2>
+
+    <div id="recentDigits" class="recent-digits">
+      No data yet
+    </div>
+
+  </section>
+
+
+  <!-- STATISTICS -->
+  <section class="grid">
+
+    <div class="stat-card">
+      <span>Total Ticks</span>
+      <strong id="totalTicks">0</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Unique Digits</span>
+      <strong id="uniqueDigits">0</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Most Frequent</span>
+      <strong id="mostFrequent">-</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Least Frequent</span>
+      <strong id="leastFrequent">-</strong>
+    </div>
+
+  </section>
+
+
+  <!-- IMPORTANT NOTICE -->
+  <section class="warning">
+
+    <strong>IMPORTANT</strong>
+
+    <p>
+      This application analyzes live tick data received from Deriv.
+      The percentages shown are historical frequencies from the data
+      collected during the current session. They do not guarantee the
+      next digit or future market outcome.
+    </p>
+
+  </section>
+
+</main>
+
+
+<footer>
+  Digit Analysis Pro • Live market data analysis only
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+    </html>
